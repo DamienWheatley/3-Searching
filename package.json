@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DamienWheatley/3-Searching/issues"
   },
-  "homepage": "https://github.com/DamienWheatley/3-Searching#readme"
+  "homepage": "https://github.com/DamienWheatley/3-Searching#readme",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
 }
