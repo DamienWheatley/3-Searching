@@ -11,7 +11,7 @@ function linearSearchForValue(array,value){
 };
 
 function generateRandomSearch(array){
-    let wordsToSearchFor = ['basg'];
+    let wordsToSearchFor = [];
     for(i=0;i<10;i++){
         let randomNumber = Math.random() * 466552;
         let roundedRandomNumber = Math.round(randomNumber);
