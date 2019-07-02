@@ -18,11 +18,11 @@ function generateRandomSearch(array){
         wordsToSearchFor.push(array[roundedRandomNumber]);
     };
     return wordsToSearchFor;
-}
+};
 
 function startSearch(array){
     let randomWords = generateRandomSearch(array);
     return linearSearchForValue(array,randomWords);
-}
+};
 
 startSearch(arrayOfText);
