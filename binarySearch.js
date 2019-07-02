@@ -3,10 +3,9 @@ let arrayOfText = require('./index.js').textByLine;
 function binarySearchForValue(array,value){
     while(array.length > 1){
         let middleIndex = Math.round(array.length / 2);
-        let middleIndexValue;
+        let middleIndexValue, reducedArray;
         let checkFirstLetter = checkIfFirstLetterIsCapitalized(value);
-        let reducedArray;
-
+        
         console.log(`VALUE TO LOOK FOR: ` + value)
         console.log(`MIDDLE VALUE: ` + array[middleIndex])
 
@@ -20,11 +19,11 @@ function binarySearchForValue(array,value){
             return `${value} found at index ${middleIndex}`;
         } else if(value > middleIndexValue){
             console.log(`${value} is greater than ${middleIndexValue}`)
-            reducedArray = array.splice(middleIndex,array.length);
+            reducedArray = array.splice(middleIndex + 1,array.length);
             binarySearchForValue(reducedArray,value);
         } else if(value < middleIndexValue){
             console.log(`${value} is less than ${middleIndexValue}`)
-            reducedArray = array.splice(0,middleIndex);
+            reducedArray = array.splice(0,middleIndex - 1);
             binarySearchForValue(reducedArray,value);
         };
     };
