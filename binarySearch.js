@@ -1,4 +1,6 @@
 let arrayOfText = require('./index.js').textByLine;
+const importTimer = require('./Timer.js');
+
 
 function binarySearchForValue(array,value){
     let start = 0;
@@ -22,7 +24,7 @@ function binarySearchForValue(array,value){
 
 function generateRandomSearch(array){
     let wordsToSearchFor = [];
-    for(i=0;i<10;i++){
+    for(i=0;i<10000;i++){
         let randomNumber = Math.random() * 466552;
         let roundedRandomNumber = Math.round(randomNumber);
         wordsToSearchFor.push(array[roundedRandomNumber]);
@@ -31,13 +33,17 @@ function generateRandomSearch(array){
 };
 
 function startSearch(array){
+    let timer = new importTimer.timerClass();
     let randomWords = generateRandomSearch(array);
     let results = [];
+    timer.setStart();
     for(i=0;i < randomWords.length;i++){
         let valueToCheck = randomWords[i];
         results.push(binarySearchForValue(array,valueToCheck));
         console.log(results[i]);
     };
+    timer.setEnd();
+    console.log(timer.getStringReport());
 };
 
 startSearch(arrayOfText.sort());
