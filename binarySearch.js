@@ -1,36 +1,28 @@
 let arrayOfText = require('./index.js').textByLine;
 
 function binarySearchForValue(array,value){
-    while(array.length > 1){
-        let middleIndex = Math.round(array.length / 2);
-        let middleIndexValue, reducedArray;
-        let checkFirstLetter = checkIfFirstLetterIsCapitalized(value);
-        
-        console.log(`VALUE TO LOOK FOR: ` + value)
-        console.log(`MIDDLE VALUE: ` + array[middleIndex])
+    let start = 0;
+    let end = array.length - 1;
+    let middleIndex = Math.floor((start + end) / 2);
 
-        if(checkFirstLetter == true){
-            middleIndexValue = capitalizeFirstLetter(array[middleIndex]);
+    while(start < end && array[middleIndex] !== value){
+        if(value > array[middleIndex]){
+            start = middleIndex + 1;
         } else {
-            middleIndexValue = decapitalizeFirstLetter(array[middleIndex]);
+            end = middleIndex - 1;
         };
-
-        if(middleIndexValue === value){
-            return `${value} found at index ${middleIndex}`;
-        } else if(value > middleIndexValue){
-            console.log(`${value} is greater than ${middleIndexValue}`)
-            reducedArray = array.splice(middleIndex + 1,array.length);
-            binarySearchForValue(reducedArray,value);
-        } else if(value < middleIndexValue){
-            console.log(`${value} is less than ${middleIndexValue}`)
-            reducedArray = array.splice(0,middleIndex - 1);
-            binarySearchForValue(reducedArray,value);
-        };
+        middleIndex = Math.floor((start + end) / 2);
+    };
+    if(array[middleIndex] === value){
+        return `${value} has been found`;
+    } else if(array[middleIndex] !== value){
+        return `${value} has not been found`;
     };
 };
+
 function generateRandomSearch(array){
     let wordsToSearchFor = [];
-    for(i=0;i<1;i++){
+    for(i=0;i<10;i++){
         let randomNumber = Math.random() * 466552;
         let roundedRandomNumber = Math.round(randomNumber);
         wordsToSearchFor.push(array[roundedRandomNumber]);
@@ -38,21 +30,14 @@ function generateRandomSearch(array){
     return wordsToSearchFor;
 };
 
-function checkIfFirstLetterIsCapitalized(stringToCheck){
-    let check = /[A-Z]/.test(stringToCheck);
-    return check == true ? true : false;
-};
-
-function capitalizeFirstLetter(stringToCapitalize){
-    return stringToCapitalize.charAt(0).toUpperCase() + stringToCapitalize.slice(1);
-};
-function decapitalizeFirstLetter(stringToDecapitalize){
-    return stringToDecapitalize.charAt(0).toLowerCase() + stringToDecapitalize.slice(1);
-};
-
 function startSearch(array){
     let randomWords = generateRandomSearch(array);
-    return binarySearchForValue(array,randomWords);
+    let results = [];
+    for(i=0;i < randomWords.length;i++){
+        let valueToCheck = randomWords[i];
+        results.push(binarySearchForValue(array,valueToCheck));
+        console.log(results[i]);
+    };
 };
 
-startSearch(arrayOfText);
+startSearch(arrayOfText.sort());
