@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/DamienWheatley/3-Searching#readme",
   "dependencies": {
+    "chai": "^4.2.0",
     "fs": "0.0.1-security"
   }
 }
