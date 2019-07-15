@@ -1,4 +1,4 @@
-let testBoard = '026000003000000000700048060070001000040205009200080057508000000000000020000010540'
+
 
 function parseBoard(board){
     let parsedBoard = [];
@@ -26,7 +26,7 @@ function saveEmptyPositions(parsedBoard){
     return emptyPositions;
 };
 
-function checkRowForMatchingValues(board,row,value){
+function valueInRowIsValid(board,row,value){
     for(i=0; i < board[row].length; i++){ // iterates through all rows
         if(board[row][i] === value){ //iterates through each column in the row and checks the value.
             return false; //false if there is a match.
@@ -35,16 +35,16 @@ function checkRowForMatchingValues(board,row,value){
     return true; 
 }
 
-function checkColumnForMatchingValues(board,column,value){
+function valueInColumnIsValid(board,column,value){
     for(i=0; i < board.length; i++){ // iterates through all rows
-        if(board[i][column] === value){ //iterates through each column in the row and checks the value.
+        if(board[i][column] === value){ //iterates through each row in the column and checks the value.
             return false; //false if there is a match.
         };
     };
     return true; 
 }
 
-function check3x3Square(board,column,row,value){
+function valueIn3x3SquareIsValid(board,column,row,value){
     let columnCorner = 0;
     let rowCorner = 0;
     let squareSize = 3;
@@ -54,13 +54,13 @@ function check3x3Square(board,column,row,value){
         columnCorner += squareSize;
     };
 
-    while(row >= rowCorner + squareSize){ //find the uppermost row
-        rowCorner += squareSize;
+    while(row >= rowCorner + squareSize){ //add squareSize (3) to the row each time until row is less than or equal to rowCorner + squareSize (3)... 
+        rowCorner += squareSize; // ... as this finds us the 3x3 square to search from
     };
 
-    for(i=rowCorner; i < rowCorner + squareSize; i++){
-        for(j=columnCorner; j < columnCorner + squareSize; j++){
-            if(board[i][j] === value){
+    for(i=rowCorner; i < rowCorner + squareSize; i++){ //iterate through the three rows of the 3x3 Square
+        for(j=columnCorner; j < columnCorner + squareSize; j++){ //iterate through the 3 columns of the 3x3 Square
+            if(board[i][j] === value){ //if the value is contained within this square return false because value already exists in this 3x3 Square.
                 return false;
             };
         };
@@ -68,10 +68,10 @@ function check3x3Square(board,column,row,value){
     return true;
 };
 
-function checkValue(board,column,row,value){
-    if(checkRowForMatchingValues(board,row,value) &&
-        checkColumnForMatchingValues(board,column,value) &&
-        check3x3Square(board,column,row,value)){
+function checkValidityOfValue(board,column,row,value){
+    if(valueInRowIsValid(board,row,value) &&
+        valueInColumnIsValid(board,column,value) &&
+        valueIn3x3SquareIsValid(board,column,row,value)){
             return true;
     } else {
         return false;
@@ -80,33 +80,33 @@ function checkValue(board,column,row,value){
 
 function solvePuzzle(parsedBoard,emptyPositions){
     let limit = 9;
-    let i, row, column, value, found;
+    let i, row, column, value, validValueFound;
     
     for(i = 0; i < emptyPositions.length;){
-        row = emptyPositions[i][0];
-        column = emptyPositions[i][1];
+        row = emptyPositions[i][0]; //inside emptyPositions array, take emptyPositions[i] and then from inside emptyPositions[i]...
+        column = emptyPositions[i][1]; //... is another array containing the row/column - or 0/1 (0 being row, 1 being column).
 
-        value = parsedBoard[row][column] + 1;
-        found = false;
+        value = parsedBoard[row][column] + 1; // set value as 1 more than is in the selected "cell" (gathered from row/column of "parsedBoard")
+        validValueFound = false;
 
-        while(!found && value <= limit){
-            if(checkValue(parsedBoard,column,row,value)){
-                found = true;
-                parsedBoard[row][column] = value;
-                i++;
+        while(!validValueFound && value <= limit){
+            if(checkValidityOfValue(parsedBoard,column,row,value)){
+                validValueFound = true;
+                parsedBoard[row][column] = value; //set parsedBoard cell at "emptyPositions" position to value ...
+                i++; //move to next "cell"
             } else {
-                value++;
+                value++; //if invalid increase value and search again.
             };
         };
 
-        if(!found){
+        if(!validValueFound){ //if validValueFound is not true ("if(!validValueFound === true)")
             parsedBoard[row][column] = 0;
             i--;
         };
     };
 
     parsedBoard.forEach(function(row){
-        row.join();
+        row.join(); //join each row together to print an array containing all 8 rows that contain 8 columns.
     });
 
     return parsedBoard;
@@ -118,5 +118,7 @@ function solveSudoku(board) {
   
     return solvePuzzle(parsedBoard, emptyPositions);
 };
+
+let testBoard = '026000003000000000700048060070001000040205009200080057508000000000000020000010540';
 
 console.log(solveSudoku(testBoard));
