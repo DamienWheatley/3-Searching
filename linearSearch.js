@@ -15,7 +15,7 @@ function linearSearchForValue(array,value){
 
 function generateRandomSearch(array){
     let wordsToSearchFor = [];
-    for(i=0;i<10000;i++){
+    for(i=0;i<50000;i++){
         let randomNumber = Math.random() * 466552;
         let roundedRandomNumber = Math.round(randomNumber);
         wordsToSearchFor.push(array[roundedRandomNumber]);
@@ -31,7 +31,6 @@ function startSearch(array){
     for(i=0;i < randomWords.length;i++){
         let valueToCheck = randomWords[i];
         results.push(linearSearchForValue(array,valueToCheck));
-        console.log(results[i]);
     };
     timer.setEnd();
     console.log(timer.getStringReport());

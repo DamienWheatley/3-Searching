@@ -23,8 +23,8 @@ function binarySearchForValue(array,value){
 };
 
 function generateRandomSearch(array){
-    let wordsToSearchFor = [];
-    for(i=0;i<10000;i++){
+    let wordsToSearchFor = ['bananaHammock'];
+    for(i=0;i<500000;i++){
         let randomNumber = Math.random() * 466552;
         let roundedRandomNumber = Math.round(randomNumber);
         wordsToSearchFor.push(array[roundedRandomNumber]);
@@ -40,7 +40,6 @@ function startSearch(array){
     for(i=0;i < randomWords.length;i++){
         let valueToCheck = randomWords[i];
         results.push(binarySearchForValue(array,valueToCheck));
-        console.log(results[i]);
     };
     timer.setEnd();
     console.log(timer.getStringReport());
