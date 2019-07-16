@@ -1,5 +1,3 @@
-
-
 function parseBoard(board){
     let parsedBoard = [];
     for(i = 0; i < 9; i++){ //iterate through 9 times (assuming its a 9x9 sudoku), once for each row.
@@ -33,7 +31,7 @@ function valueInRowIsValid(board,row,value){
         };
     };
     return true; 
-}
+};
 
 function valueInColumnIsValid(board,column,value){
     for(i=0; i < board.length; i++){ // iterates through all rows
@@ -42,7 +40,7 @@ function valueInColumnIsValid(board,column,value){
         };
     };
     return true; 
-}
+};
 
 function valueIn3x3SquareIsValid(board,column,row,value){
     let columnCorner = 0;
@@ -53,11 +51,9 @@ function valueIn3x3SquareIsValid(board,column,row,value){
                                                 //then the next "while" loop wont run because column will no longer be more than or equal to (columnCorner = 3) + (squareSize = 3) = 6.
         columnCorner += squareSize;
     };
-
     while(row >= rowCorner + squareSize){ //add squareSize (3) to the row each time until row is less than or equal to rowCorner + squareSize (3)... 
         rowCorner += squareSize; // ... as this finds us the 3x3 square to search from
     };
-
     for(i=rowCorner; i < rowCorner + squareSize; i++){ //iterate through the three rows of the 3x3 Square
         for(j=columnCorner; j < columnCorner + squareSize; j++){ //iterate through the 3 columns of the 3x3 Square
             if(board[i][j] === value){ //if the value is contained within this square return false because value already exists in this 3x3 Square.
@@ -142,7 +138,6 @@ function solvePuzzle(parsedBoard,emptyPositions){
     parsedBoard.forEach(function(row){
         row.join(); //join each row together to print an array containing all 8 rows that contain 8 columns.
     });
-
     return parsedBoard;
 };
 
@@ -154,5 +149,4 @@ function solveSudoku(board) {
 };
 
 let testBoard = '090000006000960485000581000004000000517200900602000370100804020706000810300090000';
-
 console.log(solveSudoku(testBoard));
