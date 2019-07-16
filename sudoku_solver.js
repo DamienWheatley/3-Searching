@@ -1,3 +1,5 @@
+
+
 function parseBoard(board){
     let parsedBoard = [];
     for(i = 0; i < 9; i++){ //iterate through 9 times (assuming its a 9x9 sudoku), once for each row.
@@ -13,6 +15,7 @@ function parseBoard(board){
 
 function saveEmptyPositions(parsedBoard){
     let emptyPositions = [];
+
     for(i = 0; i < parsedBoard.length; i++){ //iterate through the "rows"
         for(j = 0; j < parsedBoard[i].length; j++){ //iterate through the "columns" for each "row"
             if(parsedBoard[i][j] === 0){ // it the value = 0;
@@ -30,7 +33,7 @@ function valueInRowIsValid(board,row,value){
         };
     };
     return true; 
-};
+}
 
 function valueInColumnIsValid(board,column,value){
     for(i=0; i < board.length; i++){ // iterates through all rows
@@ -39,19 +42,22 @@ function valueInColumnIsValid(board,column,value){
         };
     };
     return true; 
-};
+}
 
 function valueIn3x3SquareIsValid(board,column,row,value){
-    let columnCorner, rowCorner = 0;
+    let columnCorner = 0;
+    let rowCorner = 0;
     let squareSize = 3;
 
-    while(column >= columnCorner + squareSize){ //find the uppermost column e.g if column = 4 - this greater than (columnCorner = 0) + (squareSize = 3), so add squareSize to columnCorner to make it 3... 
-//... then the next "while" loop wont run because column will no longer be more than or equal to (columnCorner = 3) + (squareSize = 3) = 6.
+    while(column >= columnCorner + squareSize){ //find the uppermost column e.g if column = 4 - this greater than (columnCorner = 0) + (squareSize = 3), so add squareSize to columnCorner to make it 3, 
+                                                //then the next "while" loop wont run because column will no longer be more than or equal to (columnCorner = 3) + (squareSize = 3) = 6.
         columnCorner += squareSize;
     };
+
     while(row >= rowCorner + squareSize){ //add squareSize (3) to the row each time until row is less than or equal to rowCorner + squareSize (3)... 
         rowCorner += squareSize; // ... as this finds us the 3x3 square to search from
     };
+
     for(i=rowCorner; i < rowCorner + squareSize; i++){ //iterate through the three rows of the 3x3 Square
         for(j=columnCorner; j < columnCorner + squareSize; j++){ //iterate through the 3 columns of the 3x3 Square
             if(board[i][j] === value){ //if the value is contained within this square return false because value already exists in this 3x3 Square.
@@ -86,7 +92,7 @@ function resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibi
                 value.push(x); //... push it to "value"... 
                 possibleValues++; //... and increment possible values for this emptyPosition
                 if(possibleValues > 1){ // if there are more than 1 possibleValue...
-                    x=10; //... set x to 10 (basically to exit this for loop)
+                    break; //... exit this loop
                 };
             };
         };
@@ -100,14 +106,16 @@ function resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibi
 };
 
 function solvePuzzle(parsedBoard,emptyPositions){
-    let i, row, column, value, validValueFound;
-    let limit = 9;
     let singlePossibilitiesResolved = [1];
 
     while(singlePossibilitiesResolved.length !== 0){
         resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibilitiesResolved);
         emptyPositions = saveEmptyPositions(parsedBoard);
     };
+
+    let i, row, column, value, validValueFound;
+    let limit = 9;
+
     for(i = 0; i < emptyPositions.length;){
         row = emptyPositions[i][0]; //inside emptyPositions array, take emptyPositions[i] and then from inside emptyPositions[i]...
         column = emptyPositions[i][1]; //... is another array containing the row/column - or 0/1 (0 being row, 1 being column).
@@ -124,24 +132,27 @@ function solvePuzzle(parsedBoard,emptyPositions){
                 value++; //if invalid increase value and search again.
             };
         };
+
         if(!validValueFound){ //if validValueFound is not true ("if(!validValueFound === true)")
             parsedBoard[row][column] = 0;
             i--;
         };
     };
+
     parsedBoard.forEach(function(row){
         row.join(); //join each row together to print an array containing all 8 rows that contain 8 columns.
     });
+
     return parsedBoard;
 };
 
 function solveSudoku(board) {
     let parsedBoard = parseBoard(board);
     let emptyPositions = saveEmptyPositions(parsedBoard);
-
+  
     return solvePuzzle(parsedBoard, emptyPositions);
 };
 
-let testBoard = '030200006000009004760000000000050700000001860050480090800000000000076000075008100';
+let testBoard = '090000006000960485000581000004000000517200900602000370100804020706000810300090000';
 
 console.log(solveSudoku(testBoard));
