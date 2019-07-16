@@ -47,39 +47,39 @@ describe('Sudoku Solver', function(){
         });
     });
 
-    describe('checkRowForMatchingValues check', function(){
+    describe('valueInRowIsValid check', function(){
         it('should check that each value in the row does not equal the input', function(){
-            expect(solver.checkRowForMatchingValues(parsedBoard,0,2)).to.be.ok;
-            expect(solver.checkRowForMatchingValues(parsedBoard,0,9)).to.not.be.ok;
+            expect(solver.valueInRowIsValid(parsedBoard,0,2)).to.be.ok;
+            expect(solver.valueInRowIsValid(parsedBoard,0,9)).to.not.be.ok;
         });
     });
 
-    describe('checkColumnForMatchingValues check', function(){
+    describe('valueInColumnIsValid check', function(){
         it('should check that each value in the column does not equal the input', function(){
-            expect(solver.checkColumnForMatchingValues(parsedBoard,0,9)).to.be.ok;
-            expect(solver.checkColumnForMatchingValues(parsedBoard,0,5)).to.not.be.ok;
+            expect(solver.valueInColumnIsValid(parsedBoard,0,9)).to.be.ok;
+            expect(solver.valueInColumnIsValid(parsedBoard,0,5)).to.not.be.ok;
         });
     });
 
-    describe('check3x3Square check', function(){
+    describe('valueIn3x3SquareIsValid check', function(){
         it('should check that each value in the 3 x 3 square does not equal the input', function(){
-            expect(solver.check3x3Square(parsedBoard,2,2,1)).to.be.ok;
-            expect(solver.check3x3Square(parsedBoard,7,7,9)).to.be.ok;
-            expect(solver.check3x3Square(parsedBoard,8,1,3)).to.be.ok;
+            expect(solver.valueIn3x3SquareIsValid(parsedBoard,2,2,1)).to.be.ok;
+            expect(solver.valueIn3x3SquareIsValid(parsedBoard,7,7,9)).to.be.ok;
+            expect(solver.valueIn3x3SquareIsValid(parsedBoard,8,1,3)).to.be.ok;
 
-            expect(solver.check3x3Square(parsedBoard,2,2,9)).to.not.be.ok;
-            expect(solver.check3x3Square(parsedBoard,7,7,1)).to.not.be.ok;
-            expect(solver.check3x3Square(parsedBoard,7,7,8)).to.not.be.ok;
+            expect(solver.valueIn3x3SquareIsValid(parsedBoard,2,2,9)).to.not.be.ok;
+            expect(solver.valueIn3x3SquareIsValid(parsedBoard,7,7,1)).to.not.be.ok;
+            expect(solver.valueIn3x3SquareIsValid(parsedBoard,7,7,8)).to.not.be.ok;
         });
     });
 
-    describe('checkValue check', function(){
+    describe('checkValidityOfValue check', function(){
         it('should check whether a value is valid for a particular position', function(){
-            expect(solver.checkValue(parsedBoard,0,0,2)).to.be.ok;
-            expect(solver.checkValue(parsedBoard,8,8,4)).to.be.ok;
+            expect(solver.checkValidityOfValue(parsedBoard,0,0,2)).to.be.ok;
+            expect(solver.checkValidityOfValue(parsedBoard,8,8,4)).to.be.ok;
 
-            expect(solver.checkValue(parsedBoard,8,8,9)).to.not.be.ok;
-            expect(solver.checkValue(parsedBoard,0,0,1)).to.not.be.ok;
+            expect(solver.checkValidityOfValue(parsedBoard,8,8,9)).to.not.be.ok;
+            expect(solver.checkValidityOfValue(parsedBoard,0,0,1)).to.not.be.ok;
         });
     });
 
@@ -93,8 +93,11 @@ describe('Sudoku Solver', function(){
                             [ 7 , 4 , 6 , 3 , 2 , 5 , 8 , 1 , 9 ],
                             [ 3 , 2 , 8 , 1 , 9 , 6 , 5 , 4 , 7 ]];
 
+    //describe('')
+
     describe('solvePuzzle check', function() {
         it('should find a solution to the puzzle passed in', function() {
+            let parsedBoard = solver.parseBoard(board);
             let solution = solver.solvePuzzle(parsedBoard, emptyPositions);
 
             expect(solution).to.eql(expectedSolution);

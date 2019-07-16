@@ -26,7 +26,7 @@ module.exports.saveEmptyPositions = function(parsedBoard){
     return emptyPositions;
 };
 
-module.exports.checkRowForMatchingValues = function(board,row,value){
+module.exports.valueInRowIsValid = function(board,row,value){
     for(i=0; i < board[row].length; i++){ // iterates through all rows
         if(board[row][i] === value){ //iterates through each column in the row and checks the value.
             return false; //false if there is a match.
@@ -35,7 +35,7 @@ module.exports.checkRowForMatchingValues = function(board,row,value){
     return true; 
 };
 
-module.exports.checkColumnForMatchingValues = function(board,column,value){
+module.exports.valueInColumnIsValid = function(board,column,value){
     for(i=0; i < board.length; i++){ // iterates through all rows
         if(board[i][column] === value){ //iterates through each column in the row and checks the value.
             return false; //false if there is a match.
@@ -44,7 +44,7 @@ module.exports.checkColumnForMatchingValues = function(board,column,value){
     return true; 
 };
 
-module.exports.check3x3Square = function(board,column,row,value){
+module.exports.valueIn3x3SquareIsValid = function(board,column,row,value){
     let columnCorner = 0;
     let rowCorner = 0;
     let squareSize = 3;
@@ -68,11 +68,11 @@ module.exports.check3x3Square = function(board,column,row,value){
     return true;
 };
 
-module.exports.checkValue = function(board,column,row,value){
-    if(this.checkRowForMatchingValues(board,row,value) &&
-        this.checkColumnForMatchingValues(board,column,value) &&
-        this.check3x3Square(board,column,row,value)){
-            return true;
+module.exports.checkValidityOfValue = function(board,column,row,value){
+    if(this.valueInRowIsValid(board,row,value) &&
+        this.valueInColumnIsValid(board,column,value) &&
+        this.valueIn3x3SquareIsValid(board,column,row,value)){
+        return true;
     } else {
         return false;
     };
@@ -90,7 +90,7 @@ module.exports.solvePuzzle = function(parsedBoard,emptyPositions){
         found = false;
 
         while(!found && value <= limit){
-            if(this.checkValue(parsedBoard,column,row,value)){
+            if(this.checkValidityOfValue(parsedBoard,column,row,value)){
                 found = true;
                 parsedBoard[row][column] = value;
                 i++;

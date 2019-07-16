@@ -1,5 +1,3 @@
-
-
 function parseBoard(board){
     let parsedBoard = [];
     for(i = 0; i < 9; i++){ //iterate through 9 times (assuming its a 9x9 sudoku), once for each row.
@@ -78,10 +76,43 @@ function checkValidityOfValue(board,column,row,value){
     };
 };
 
+function resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibilitiesResolved){
+    let row, column, value;
+    singlePossibilitiesResolved.splice(0,singlePossibilitiesResolved.length); //make "singlePossibilitiesResolved.length" = 0
+    for(y = 0; y < emptyPositions.length;y++){ //iterate through all emptyPositions
+        let possibleValues = 0;
+        row = emptyPositions[y][0]; 
+        column = emptyPositions[y][1];
+        value = [];
+
+        for(x=1; x <= 9;x++){
+            if(checkValidityOfValue(parsedBoard,column,row,x)){ //iterate through all values 1-9, if it's valid ...
+                value.push(x); //... push it to "value"... 
+                possibleValues++; //... and increment possible values for this emptyPosition
+                if(possibleValues > 1){ // if there are more than 1 possibleValue...
+                    x=10; //... set x to 10 (basically to exit this for loop)
+                };
+            };
+        };
+        if(possibleValues===1){ // if there's only 1 possible value...
+            parsedBoard[row][column] = value[0]; //... write it down!
+            singlePossibilitiesResolved.push(value[0]); //in effect just adding one when a single possibility is dealt with in order to exit...
+            //... the containing while() loop.
+        };
+    };
+    return parsedBoard;
+};
+
 function solvePuzzle(parsedBoard,emptyPositions){
-    let limit = 9;
     let i, row, column, value, validValueFound;
-    
+    let limit = 9;
+    let singlePossibilitiesResolved = [1];
+
+    while(singlePossibilitiesResolved.length !== 0){
+        resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibilitiesResolved);
+        emptyPositions = saveEmptyPositions(parsedBoard);
+    };
+
     for(i = 0; i < emptyPositions.length;){
         row = emptyPositions[i][0]; //inside emptyPositions array, take emptyPositions[i] and then from inside emptyPositions[i]...
         column = emptyPositions[i][1]; //... is another array containing the row/column - or 0/1 (0 being row, 1 being column).
@@ -92,7 +123,7 @@ function solvePuzzle(parsedBoard,emptyPositions){
         while(!validValueFound && value <= limit){
             if(checkValidityOfValue(parsedBoard,column,row,value)){
                 validValueFound = true;
-                parsedBoard[row][column] = value; //set parsedBoard cell at "emptyPositions" position to value ...
+                parsedBoard[row][column] = value; //set parsedBoard cell as value ...
                 i++; //move to next "cell"
             } else {
                 value++; //if invalid increase value and search again.
@@ -119,6 +150,6 @@ function solveSudoku(board) {
     return solvePuzzle(parsedBoard, emptyPositions);
 };
 
-let testBoard = '026000003000000000700048060070001000040205009200080057508000000000000020000010540';
+let testBoard = '090000006000960485000581000004000000517200900602000370100804020706000810300090000';
 
 console.log(solveSudoku(testBoard));
