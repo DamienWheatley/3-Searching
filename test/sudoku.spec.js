@@ -93,8 +93,6 @@ describe('Sudoku Solver', function(){
                             [ 7 , 4 , 6 , 3 , 2 , 5 , 8 , 1 , 9 ],
                             [ 3 , 2 , 8 , 1 , 9 , 6 , 5 , 4 , 7 ]];
 
-    //describe('')
-
     describe('solvePuzzle check', function() {
         it('should find a solution to the puzzle passed in', function() {
             let parsedBoard = solver.parseBoard(board);

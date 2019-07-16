@@ -108,7 +108,6 @@ function solvePuzzle(parsedBoard,emptyPositions){
         resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibilitiesResolved);
         emptyPositions = saveEmptyPositions(parsedBoard);
     };
-
     let i, row, column, value, validValueFound;
     let limit = 9;
 
@@ -128,13 +127,11 @@ function solvePuzzle(parsedBoard,emptyPositions){
                 value++; //if invalid increase value and search again.
             };
         };
-
         if(!validValueFound){ //if validValueFound is not true ("if(!validValueFound === true)")
             parsedBoard[row][column] = 0;
             i--;
         };
     };
-
     parsedBoard.forEach(function(row){
         row.join(); //join each row together to print an array containing all 8 rows that contain 8 columns.
     });
@@ -148,5 +145,5 @@ function solveSudoku(board) {
     return solvePuzzle(parsedBoard, emptyPositions);
 };
 
-let testBoard = '090000006000960485000581000004000000517200900602000370100804020706000810300090000';
+let testBoard = '030200006000009004760000000000050700000001860050480090800000000000076000075008100';
 console.log(solveSudoku(testBoard));
