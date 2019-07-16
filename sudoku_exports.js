@@ -78,35 +78,68 @@ module.exports.checkValidityOfValue = function(board,column,row,value){
     };
 };
 
+module.exports.resolveSinglePossibilityValues = function(parsedBoard,emptyPositions,singlePossibilitiesResolved){
+    let row, column, value;
+    singlePossibilitiesResolved.splice(0,singlePossibilitiesResolved.length); //make "singlePossibilitiesResolved.length" = 0
+    for(y = 0; y < emptyPositions.length;y++){ //iterate through all emptyPositions
+        let possibleValues = 0;
+        row = emptyPositions[y][0]; 
+        column = emptyPositions[y][1];
+        value = [];
+
+        for(x=1; x <= 9;x++){
+            if(this.checkValidityOfValue(parsedBoard,column,row,x)){ //iterate through all values 1-9, if it's valid ...
+                value.push(x); //... push it to "value"... 
+                possibleValues++; //... and increment possible values for this emptyPosition
+                if(possibleValues > 1){ // if there are more than 1 possibleValue...
+                    x=10; //... set x to 10 (basically to exit this for loop)
+                };
+            };
+        };
+        if(possibleValues===1){ // if there's only 1 possible value...
+            parsedBoard[row][column] = value[0]; //... write it down!
+            singlePossibilitiesResolved.push(value[0]); //in effect just adding one when a single possibility is dealt with in order to exit...
+            //... the containing while() loop.
+        };
+    };
+    return parsedBoard;
+};
+
 module.exports.solvePuzzle = function(parsedBoard,emptyPositions){
+    let i, row, column, value, validValueFound;
     let limit = 9;
-    let row, column, value, found;
-    
+    let singlePossibilitiesResolved = [1];
+
+    while(singlePossibilitiesResolved.length !== 0){
+        this.resolveSinglePossibilityValues(parsedBoard,emptyPositions,singlePossibilitiesResolved);
+        emptyPositions = this.saveEmptyPositions(parsedBoard);
+    };
+
     for(i = 0; i < emptyPositions.length;){
-        row = emptyPositions[i][0];
-        column = emptyPositions[i][1];
+        row = emptyPositions[i][0]; //inside emptyPositions array, take emptyPositions[i] and then from inside emptyPositions[i]...
+        column = emptyPositions[i][1]; //... is another array containing the row/column - or 0/1 (0 being row, 1 being column).
 
-        value = parsedBoard[row][column] + 1;
-        found = false;
+        value = parsedBoard[row][column] + 1; // set value as 1 more than is in the selected "cell" (gathered from row/column of "parsedBoard")
+        validValueFound = false;
 
-        while(!found && value <= limit){
+        while(!validValueFound && value <= limit){
             if(this.checkValidityOfValue(parsedBoard,column,row,value)){
-                found = true;
-                parsedBoard[row][column] = value;
-                i++;
+                validValueFound = true;
+                parsedBoard[row][column] = value; //set parsedBoard cell as value ...
+                i++; //move to next "cell"
             } else {
-                value++;
+                value++; //if invalid increase value and search again.
             };
         };
 
-        if(!found){
+        if(!validValueFound){ //if validValueFound is not true ("if(!validValueFound === true)")
             parsedBoard[row][column] = 0;
             i--;
         };
     };
 
     parsedBoard.forEach(function(row){
-        console.log(row.join());
+        row.join(); //join each row together to print an array containing all 8 rows that contain 8 columns.
     });
 
     return parsedBoard;

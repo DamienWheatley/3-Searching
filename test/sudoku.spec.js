@@ -98,6 +98,7 @@ describe('Sudoku Solver', function(){
     describe('solvePuzzle check', function() {
         it('should find a solution to the puzzle passed in', function() {
             let parsedBoard = solver.parseBoard(board);
+            let emptyPositions = solver.saveEmptyPositions(parsedBoard);
             let solution = solver.solvePuzzle(parsedBoard, emptyPositions);
 
             expect(solution).to.eql(expectedSolution);
